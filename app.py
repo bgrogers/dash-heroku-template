@@ -12,7 +12,7 @@ import plotly.express as px
 import plotly.offline as pyo
 from datetime import date
 import dash
-#from jupyter_dash import JupyterDash
+from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -1018,6 +1018,8 @@ ctwh_change_map.show(config={'scrollZoom': False,'displayModeBar': False, 'stati
 
 
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
+server = app.server
+
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(id='page-content')
