@@ -1009,6 +1009,44 @@ ctwh_change_map.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 
 ctwh_change_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
+## Contested States
+ctwh_state=ctwh_change[ctwh_change['State'].isin(['Iowa', 'Texas', 'Michigan','New Hampshire', 'Nevada','Georgia','Minnesota', 'Wisconsin', 'Arizona','Pennsylvania','Ohio',
+                        'Florida', 'Maine', 'North Carolina','Montana', 'Colorado', 'Virginia','New Mexico','Alaska','South Carolina'])]
+
+ctwh_state=ctwh_state.sort_values(by='Days out from the Election', ascending=False)
+
+state_map = px.scatter(ctwh_state, x="combine_probs", y='fund_Prob' ,animation_frame="timeframe", 
+             animation_group='State', 
+                 color ='State Rating', size = 'ECV',size_max=60,text='State_abb',
+                 labels={
+                     "fund_Prob": "Contested States",
+                     "combine_probs": "Probability of Democratic State Win"},            
+                 title="Changing Probabilites of Contested States",
+                 color_discrete_map={
+                        "Safe D": "rgb(33,102,172)",
+                        "Likely D": "rgb(67,147,195)",
+                        "Slightly D": "rgb(146,197,222)",
+                        "Slightly R": "rgb(239,59,44)",
+                        "Likely R": "rgb(203,24,29)",
+                        "Safe R": "rgb(165,15,21)"}, 
+                     category_orders={"State Rating": ["Safe D", "Likely D", "Slightly D", 
+                                                      "Toss Up", "Slightly R", "Likely R", "Safe R"]})
+
+
+state_map.update_traces(textposition='middle center',  textfont={'color':"white"})
+
+state_map.update_layout(autosize=False,width=1200, paper_bgcolor="#F5F5F5", plot_bgcolor="#F5F5F5",
+                  height=600,yaxis={'visible': True, 'showticklabels': False}, showlegend=False)
+
+state_map.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 1800
+
+state_map.add_annotation(x=.5, y= 1, text="50/50", showarrow=False, yshift=10  )
+state_map.update_layout(shapes=[dict(type= 'line', yref= 'paper', y0= 0, y1=.95, xref= 'x', x0= .5, x1= .5,
+                        line=dict(color="Dark Blue",width=3))])
+
+state_map.show()
+
+
 # # Dash App
 
 # ## TRUE SCRIPT
@@ -1077,7 +1115,11 @@ html.Center(children=[
 
     html.Br(),
     
-    html.Center(children = [dcc.Graph(figure=ctwh_bar, config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})]), 
+    html.Center(children = [dcc.Graph(figure=ctwh_change_map, config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})]), 
+    
+    html.Br(),
+  
+    html.Center(children = [dcc.Graph(figure=state_map, config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})]), 
     
     html.Br(),
     
