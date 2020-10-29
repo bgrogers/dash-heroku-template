@@ -6,12 +6,13 @@
 
 import numpy as np
 import pandas as pd
+import os
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.offline as pyo
 from datetime import date
 import dash
-from jupyter_dash import JupyterDash
+#from jupyter_dash import JupyterDash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -984,7 +985,7 @@ ctwh_change.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlo
 
 
 
-app = JupyterDash(__name__, suppress_callback_exceptions=True)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div(id='page-content')
@@ -1991,10 +1992,10 @@ def display_page(pathname):
     else:
         return index_page
 
-
+PORT = os.environ.get('PORT')
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8051)
+    app.run_server(debug=True, port=PORT)
 
 
 # In[ ]:
