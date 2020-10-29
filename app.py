@@ -2028,10 +2028,11 @@ def display_page(pathname):
     else:
         return index_page
 
-PORT = os.environ.get('PORT')
-
+#PORT = os.environ.get('PORT')
 if __name__ == '__main__':
-    app.run_server(debug=True, port=PORT)
+    app.run_server(debug=True, port=8051, host='0.0.0.0')
+#if __name__ == '__main__':
+#    app.run_server(debug=True, port=PORT)
 
 
 # In[ ]:
