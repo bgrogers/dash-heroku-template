@@ -1015,9 +1015,9 @@ ctwh_change_map.show(config={'scrollZoom': False,'displayModeBar': False, 'stati
 
 # In[61]:
 
-#
+#suppress_callback_exceptions=True
 
-app = dash.Dash(__name__,suppress_callback_exceptions=True)
+app = dash.Dash(__name__,external_stylesheets=external_stylesheets)
 server = app.server
 
 app.layout = html.Div([
