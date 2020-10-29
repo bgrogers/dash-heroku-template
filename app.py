@@ -1015,9 +1015,9 @@ ctwh_change_map.show(config={'scrollZoom': False,'displayModeBar': False, 'stati
 
 # In[61]:
 
+#suppress_callback_exceptions=True
 
-
-app = dash.Dash(__name__, suppress_callback_exceptions=True)
+app = dash.Dash(__name__,)
 server = app.server
 
 app.layout = html.Div([
@@ -2032,7 +2032,7 @@ def display_page(pathname):
 
 #PORT = os.environ.get('PORT')
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8051, host='0.0.0.0')
+    app.run_server(debug=True, port=8051)
 #if __name__ == '__main__':
 #    app.run_server(debug=True, port=PORT)
 
