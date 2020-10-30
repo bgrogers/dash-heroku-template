@@ -1945,7 +1945,8 @@ bayesian_layout = html.Div(style={'backgroundColor': colors['background']}, chil
     html.Br(),
     
     html.Center(children=[dcc.Markdown('''
-    Our polling model involves using Bayesian forecasting to generate a distribution of vote share among democrats and republicans in each state. Our model is loosely based off work done by Alessio Benavoli in the run-up to the 2016 election.
+Our polling model involves using Bayesian forecasting to generate a distribution of vote share among democrats and republicans in each state. 
+Our model is loosely based off work done by Alessio Benavoli in the run-up to the 2016 election.
 
 Our model involves two competing elements: most importantly, we use current election cycle polling data that can be sourced from the website fivethirtyeight.com. in addition, we utilize the election results from prior elections. 
 We sourced this data from 270towin.com. We use the current polling data of each state, polling data from correlated states based on historical voting patterns, and the vote share of each state in the 2016 election to arrive at our estimates. 
