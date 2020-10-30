@@ -1343,7 +1343,7 @@ ctwh_bar.show()
 
 # Create Time Animated Map of Change Over Time
 ## Currently Mocked Up Placeholding Data
-ctwh_change=pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/updated_probs_10_24.csv')
+ctwh_change=pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/updated_probs_10_30.csv')
 ctwh_change.head()
 
 
@@ -1353,12 +1353,21 @@ ctwh_change.head()
 ctwh_change['result'] = pd.cut(ctwh_change.combine_probs, [0, 0.5, 1], labels=['Donald Trump','Joe Biden'])
 ctwh_change['State Rating'] = pd.cut(ctwh_change.combine_probs, [0,.15,.35, .5 ,.65,.85,1], labels=['Safe R', 'Likely R','Slightly R','Slightly D','Likely D','Safe D'])
 ctwh_change['timeframe']=ctwh_change['Days out from the Election']
+ctwh_change=ctwh_change.sort_values(by='Days out from the Election', ascending=False)
 ctwh_change.tail()
 
 
 # In[86]:
 
 
+Trump_ECV_90 = ctwh_change.query("result == 'Donald Trump' and timeframe == '90'")['ECV'].sum()
+Biden_ECV_90 = ctwh_change.query("result == 'Joe Biden' and timeframe == '90'")['ECV'].sum()
+Trump_ECV_80 = ctwh_change.query("result == 'Donald Trump' and timeframe == '80'")['ECV'].sum()
+Biden_ECV_80 = ctwh_change.query("result == 'Joe Biden' and timeframe == '80'")['ECV'].sum()
+Trump_ECV_70 = ctwh_change.query("result == 'Donald Trump' and timeframe == '70'")['ECV'].sum()
+Biden_ECV_70 = ctwh_change.query("result == 'Joe Biden' and timeframe == '70'")['ECV'].sum()
+Trump_ECV_60 = ctwh_change.query("result == 'Donald Trump' and timeframe == '60'")['ECV'].sum()
+Biden_ECV_60 = ctwh_change.query("result == 'Joe Biden' and timeframe == '60'")['ECV'].sum()
 Trump_ECV_10 = ctwh_change.query("result == 'Donald Trump' and timeframe == '10'")['ECV'].sum()
 Biden_ECV_10 = ctwh_change.query("result == 'Joe Biden' and timeframe == '10'")['ECV'].sum()
 Trump_ECV_20 = ctwh_change.query("result == 'Donald Trump' and timeframe == '20'")['ECV'].sum()
@@ -1370,6 +1379,11 @@ Biden_ECV_40 = ctwh_change.query("result == 'Joe Biden' and timeframe == '40'")[
 Trump_ECV_50 = ctwh_change.query("result == 'Donald Trump' and timeframe == '50'")['ECV'].sum()
 Biden_ECV_50 = ctwh_change.query("result == 'Joe Biden' and timeframe == '50'")['ECV'].sum()
 
+
+print('90 days Out: Joe Biden: ',Biden_ECV_90,' Donald Trump: ',Trump_ECV_90 )
+print('80 days Out: Joe Biden: ',Biden_ECV_80,' Donald Trump: ',Trump_ECV_80 )
+print('70 days Out: Joe Biden: ',Biden_ECV_70,' Donald Trump: ',Trump_ECV_70 )
+print('60 days Out: Joe Biden: ',Biden_ECV_60,' Donald Trump: ',Trump_ECV_60 )
 print('50 days Out: Joe Biden: ',Biden_ECV_50,' Donald Trump: ',Trump_ECV_50 )
 print('40 days Out: Joe Biden: ',Biden_ECV_40,' Donald Trump: ',Trump_ECV_40 )
 print('30 days Out: Joe Biden: ',Biden_ECV_30,' Donald Trump: ',Trump_ECV_30 )
@@ -1397,14 +1411,14 @@ ctwh_change_map = px.scatter_geo(ctwh_change, locationmode="USA-states", locatio
 ctwh_change_map.add_trace(go.Scattergeo(locations = ctwh_change['State_abb'],
                   locationmode = 'USA-states',
                   text = ctwh_change['ECV'],
-                     mode = 'text', 
+                  mode = 'text', 
                   textfont_color = 'white',
                   textfont_size = 10,
                   hoverinfo='skip',
                   textposition= 'middle center',
                   showlegend=False))
 
-ctwh_change_map.update_layout(autosize=False,width=1000,height=800, margin=dict( l=50,r=50,b=50,t=50, pad=4),paper_bgcolor="#F5F5F5",
+ctwh_change_map.update_layout(autosize=False,width=1200,height=900, margin=dict( l=50,r=50,b=50,t=50, pad=4),paper_bgcolor="#F5F5F5",
                      geo_bgcolor="#F5F5F5",
                      
                      title={'text': "Change in the Chase the White House Model's Prediction", 
@@ -1428,7 +1442,8 @@ ctwh_state=ctwh_change[ctwh_change['State'].isin(['Iowa', 'Texas', 'Michigan','N
 
 ctwh_state=ctwh_state.sort_values(by='Days out from the Election', ascending=False)
 
-state_map = px.scatter(ctwh_state, x="combine_probs", y='fund_Prob' ,animation_frame="timeframe", 
+
+state_map = px.scatter(ctwh_state, x="combine_probs", y='state_fips' ,animation_frame="Days out from the Election", 
              animation_group='State', 
                  color ='State Rating', size = 'ECV',size_max=60,text='State_abb',
                  labels={
@@ -1449,13 +1464,14 @@ state_map = px.scatter(ctwh_state, x="combine_probs", y='fund_Prob' ,animation_f
 state_map.update_traces(textposition='middle center',  textfont={'color':"white"})
 
 state_map.update_layout(autosize=False,width=1200, paper_bgcolor="#F5F5F5", plot_bgcolor="#F5F5F5",
-                  height=600,yaxis={'visible': True, 'showticklabels': False}, showlegend=False)
+                  height=600,yaxis={'visible': False, 'showticklabels': False}, showlegend=False)
 
-state_map.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 1800
+state_map.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 1200
 
 state_map.add_annotation(x=.5, y= 1, text="50/50", showarrow=False, yshift=10  )
 state_map.update_layout(shapes=[dict(type= 'line', yref= 'paper', y0= 0, y1=.95, xref= 'x', x0= .5, x1= .5,
-                        line=dict(color="Dark Blue",width=3))])
+      line=dict(color="Dark Blue",width=3))])
+
 
 state_map.show()
 
