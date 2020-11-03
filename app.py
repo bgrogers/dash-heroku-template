@@ -12,7 +12,7 @@ import plotly.express as px
 import plotly.offline as pyo
 from datetime import date
 import dash
-#from jupyter_dash import JupyterDash
+
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -1493,7 +1493,7 @@ state_map.show()
 # In[128]:
 
 
-app = dash.Dash(__name__,external_stylesheets=external_stylesheets)
+app = dash.dash(__name__,external_stylesheets=external_stylesheets)
 server = app.server
 
 app.layout = html.Div([
