@@ -1193,7 +1193,7 @@ fte_bar.show()
 
 
 fundamental_probs = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/fundamentals_probs1015.csv')
-poll_probs = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/poll_probs_10_24.csv')
+poll_probs = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/poll_probs_11_3.csv')
 codes=pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/state_codes.csv')
 
 
