@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[88]:
+# In[112]:
 
 
 import numpy as np
@@ -21,7 +21,7 @@ from dash.dependencies import Input, Output
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 
-# In[2]:
+# In[113]:
 
 
 ecv = pd.read_csv("https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/538%20Polling%20Averages/election_basics_11_3.csv", index_col=False)
@@ -33,19 +33,19 @@ ecv = ecv.sort_values('State')
 ecv = ecv.reset_index(drop = True)
 
 
-# In[3]:
+# In[114]:
 
 
 national.head()
 
 
-# In[4]:
+# In[115]:
 
 
 ecv.head()
 
 
-# In[5]:
+# In[116]:
 
 
 ind_vote = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/independent%20vote%20total.csv')
@@ -55,7 +55,7 @@ ind_count = np.mean(ind_vote['vote_ind'])/100
 # # Economist Model
 # 
 
-# In[6]:
+# In[117]:
 
 
 election = pd.read_csv("https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/economist_model_output/state_averages_and_predictions_topline.csv",index_col=False)
@@ -66,19 +66,19 @@ elect = ecv.sort_values('State_abb')
 election.head(5)
 
 
-# In[7]:
+# In[118]:
 
 
 econ_df = election.join(elect.set_index('State_abb'), on='state')
 
 
-# In[8]:
+# In[119]:
 
 
 econ_df
 
 
-# In[9]:
+# In[120]:
 
 
 econ_df['result'] = pd.cut(econ_df.projected_win_prob, [-1, 0.5, 1], labels=['Donald Trump','Joe Biden'])
@@ -86,13 +86,13 @@ econ_df['State Rating'] = pd.cut(econ_df.projected_win_prob, [-.0001, .25,.4, .5
 econ_df.head(50)
 
 
-# In[10]:
+# In[121]:
 
 
 econ_df.columns
 
 
-# In[11]:
+# In[122]:
 
 
 Trump_ECV = econ_df.query("result == 'Donald Trump'")['ECV'].sum()
@@ -100,7 +100,7 @@ Biden_ECV = econ_df.query("result == 'Joe Biden'")['ECV'].sum()
 print('Joe Biden: ',Biden_ECV,' Donald Trump: ',Trump_ECV )
 
 
-# In[12]:
+# In[123]:
 
 
 econ_map = px.choropleth(econ_df, locations='state', 
@@ -147,14 +147,14 @@ econ_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r
 econ_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[13]:
+# In[124]:
 
 
 econ_bardata=econ_df.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 econ_bardata.head()
 
 
-# In[14]:
+# In[125]:
 
 
 econ_bar = px.bar(econ_bardata, x="ECV", y='result' , color='State Rating', orientation='h',
@@ -195,7 +195,7 @@ econ_bar.show()
 
 # # Time for Change
 
-# In[15]:
+# In[126]:
 
 
 trump_pred=38.1494
@@ -212,7 +212,7 @@ tfc['Biden_adj'] =100-tfc['Polls_Trump_11_3_538']-ind_count
 tfc.head()
 
 
-# In[16]:
+# In[127]:
 
 
 tfc['difference'] = tfc['Polls_Trump_11_3_538'] - tfc['Polls_Biden_11_3_538']
@@ -224,7 +224,7 @@ tfc['State Rating adj'] = pd.cut(tfc.dif_adj, [-120, -20,-5, 0 ,5,20,120], label
 tfc.head()
 
 
-# In[17]:
+# In[128]:
 
 
 tfc_trump = tfc.query("result == 'Donald Trump'")['ECV'].sum()
@@ -233,13 +233,13 @@ tfc_trump_adj = tfc.query("result_adj == 'Donald Trump'")['ECV'].sum()
 tfc_biden_adj = tfc.query("result_adj == 'Joe Biden'")['ECV'].sum()
 
 
-# In[18]:
+# In[129]:
 
 
 print('Biden',tfc_biden_adj,'Trump',tfc_trump_adj)
 
 
-# In[19]:
+# In[130]:
 
 
 tfc_map = px.choropleth(tfc, locations='State_abb', 
@@ -285,14 +285,14 @@ tfc_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r=
 tfc_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[20]:
+# In[131]:
 
 
 tfc_bardata=tfc.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 tfc_bardata.head()
 
 
-# In[21]:
+# In[132]:
 
 
 tfc_bar = px.bar(tfc_bardata, x="ECV", y='result' , color='State Rating', orientation='h',
@@ -333,7 +333,7 @@ tfc_bar.show()
 
 # # Twitter Model
 
-# In[22]:
+# In[133]:
 
 
 trump_pred=45.82462436098755
@@ -350,7 +350,7 @@ tm['Biden_adj'] = 100 - tm['Polls_Trump_11_3_538']-2.7
 tm.head()
 
 
-# In[23]:
+# In[134]:
 
 
 tm['difference'] = tm['Polls_Trump_11_3_538'] - tm['Polls_Biden_11_3_538']
@@ -363,7 +363,7 @@ tm['State Rating adj'] = pd.cut(tm.dif_adj, [-120, -20,-5, 0 ,5,20,120], labels=
 tm.head()
 
 
-# In[24]:
+# In[135]:
 
 
 tm_trump = tm.query("result == 'Donald Trump'")['ECV'].sum()
@@ -373,19 +373,19 @@ tm_biden_adj = tm.query("result_adj == 'Joe Biden'")['ECV'].sum()
 print('Trump:',tm_trump,'Biden: ',tm_biden,'Tadj',tm_trump_adj, 'Badj',tm_biden_adj)
 
 
-# In[25]:
+# In[136]:
 
 
 tm_show = tm[['State','State_abb','ECV','Polls_Trump_11_3_538','Biden_adj','dif_adj','State Rating adj']]
 
 
-# In[26]:
+# In[137]:
 
 
 tm_show = tm_show.rename(columns={'Polls_Trump_11_3_538':'Trump', 'Biden_adj': 'Biden', 'dif_adj':'dif','State Rating adj': 'State Rating'})
 
 
-# In[27]:
+# In[138]:
 
 
 tm_map = px.choropleth(tm, locations='State_abb', 
@@ -431,14 +431,14 @@ tm_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r=5
 tm_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[28]:
+# In[139]:
 
 
 tm_bardata=tm.sort_values(by=['State Rating adj','ECV'], ascending=[True,False])
 tm_bardata.head()
 
 
-# In[29]:
+# In[140]:
 
 
 tm_map_adj = px.choropleth(tm_bardata, locations='State_abb', 
@@ -484,7 +484,7 @@ tm_map_adj.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50
 tm_map_adj.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[30]:
+# In[141]:
 
 
 tm_bar = px.bar(tm_bardata, x="ECV", y='result_adj' , color='State Rating adj', orientation='h',
@@ -525,7 +525,7 @@ tm_bar.show()
 
 # # Fair Vote Equation
 
-# In[31]:
+# In[142]:
 
 
 trump_pred=49.40298000000001
@@ -542,7 +542,7 @@ fve['Biden_adj'] = 100 - fve['Polls_Trump_11_3_538']-ind_count
 fve.head()
 
 
-# In[32]:
+# In[143]:
 
 
 fve['difference'] = fve['Polls_Trump_11_3_538'] - fve['Polls_Biden_11_3_538']
@@ -554,7 +554,7 @@ fve['State Rating adj'] = pd.cut(fve.dif_adj, [-120, -20,-5, 0 ,5,20,120], label
 fve.head()
 
 
-# In[33]:
+# In[144]:
 
 
 fve_trump = fve.query("result == 'Donald Trump'")['ECV'].sum()
@@ -564,7 +564,7 @@ fve_biden_adj = fve.query("result_adj == 'Joe Biden'")['ECV'].sum()
 print('Trump:',fve_trump,'Biden: ',fve_biden,'Tadj',fve_trump_adj, 'Badj',fve_biden_adj)
 
 
-# In[34]:
+# In[145]:
 
 
 fve_map = px.choropleth(fve, locations='State_abb', 
@@ -609,14 +609,14 @@ fve_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r=
 fve_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[35]:
+# In[146]:
 
 
 fve_bardata=fve.sort_values(by=['State Rating adj','ECV'], ascending=[True,False])
 fve_bardata.head(35)
 
 
-# In[36]:
+# In[147]:
 
 
 fve_bar = px.bar(fve_bardata, x="ECV", y='result_adj' , color='State Rating adj', orientation='h',
@@ -657,7 +657,7 @@ fve_bar.show()
 
 # # JHK
 
-# In[37]:
+# In[148]:
 
 
 jhk = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/JHK%20Forecasts%20results/jhk_11_3.csv',index_col=False)
@@ -666,7 +666,7 @@ jhk.columns
 jhk.head(5)
 
 
-# In[38]:
+# In[149]:
 
 
 jhk['difference'] = jhk['jhk_biden'] - jhk['jhk_trump']
@@ -676,7 +676,7 @@ jhk = jhk.iloc[1:]
 jhk
 
 
-# In[39]:
+# In[150]:
 
 
 Trump_ECV = jhk.query("result == 'Donald Trump'")['ECV'].sum()
@@ -684,7 +684,7 @@ Biden_ECV = jhk.query("result == 'Joe Biden'")['ECV'].sum()
 print('Joe Biden: ',Biden_ECV,' Donald Trump: ',Trump_ECV )
 
 
-# In[40]:
+# In[151]:
 
 
 jhk_map = px.choropleth(jhk, locations='State_abb', 
@@ -729,14 +729,14 @@ jhk_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r=
 jhk_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[41]:
+# In[152]:
 
 
 jhk_bardata=jhk.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 jhk_bardata.head()
 
 
-# In[42]:
+# In[153]:
 
 
 jhk_bar = px.bar(jhk_bardata, x="ECV", y='result' , color='State Rating', orientation='h',
@@ -777,7 +777,7 @@ jhk_bar.show()
 
 # # PEC
 
-# In[43]:
+# In[154]:
 
 
 pec = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/PEC%20results/PEC%2011_3.csv',index_col=False)
@@ -786,7 +786,7 @@ pec.columns
 pec.head(5)
 
 
-# In[44]:
+# In[155]:
 
 
 pec['result'] = pd.cut(pec.trump_lead, [-100, 0, 100], labels=['Joe Biden','Donald Trump'])
@@ -794,7 +794,7 @@ pec['State Rating'] = pd.cut(pec.trump_lead, [-100, -6,-3, 0 ,3,6,100], labels=[
 pec.head()
 
 
-# In[45]:
+# In[156]:
 
 
 Trump_ECV = pec.query("result == 'Donald Trump'")['ECV'].sum()
@@ -802,7 +802,7 @@ Biden_ECV = pec.query("result == 'Joe Biden'")['ECV'].sum()
 print('Joe Biden: ',Biden_ECV,' Donald Trump: ',Trump_ECV )
 
 
-# In[46]:
+# In[157]:
 
 
 pec_map = px.choropleth(pec, locations='State_abb', 
@@ -847,14 +847,14 @@ pec_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r=
 pec_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[47]:
+# In[158]:
 
 
 pec_bardata=pec.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 pec_bardata.head()
 
 
-# In[48]:
+# In[159]:
 
 
 pec_bar = px.bar(pec_bardata, x="ECV", y='result' , color='State Rating', orientation='h',
@@ -895,7 +895,7 @@ pec_bar.show()
 
 # # Plural Vote
 
-# In[49]:
+# In[160]:
 
 
 pv = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/Plural%20Vote%20Results/plural_vote_11_3.csv',index_col=False)
@@ -904,7 +904,7 @@ pv.columns
 pv.head(5)
 
 
-# In[50]:
+# In[161]:
 
 
 pv['difference'] = pv['biden_est'] - pv['trump_est']
@@ -913,7 +913,7 @@ pv['State Rating'] = pd.cut(pv.difference, [-100, -6,-3, 0 ,3,6,100], labels=['S
 pv.head()
 
 
-# In[51]:
+# In[162]:
 
 
 Trump_ECV = pv.query("result == 'Donald Trump'")['ecv'].sum()
@@ -921,7 +921,7 @@ Biden_ECV = pv.query("result == 'Joe Biden'")['ecv'].sum()
 print('Joe Biden: ',Biden_ECV,' Donald Trump: ',Trump_ECV )
 
 
-# In[52]:
+# In[163]:
 
 
 pv_map = px.choropleth(pv, locations='state_abb', 
@@ -968,14 +968,14 @@ pv_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': T
    
 
 
-# In[53]:
+# In[164]:
 
 
 pv_bardata=pv.sort_values(by=['State Rating','ecv'], ascending=[True,False])
 pv_bardata.head()
 
 
-# In[54]:
+# In[165]:
 
 
 pv_bar = px.bar(pv_bardata, x="ecv", y='result' , color='State Rating', orientation='h',
@@ -1016,7 +1016,7 @@ pv_bar.show()
 
 # # Bayesian Model
 
-# In[55]:
+# In[166]:
 
 
 BaM = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/Bayesian_model/bam_10_29.csv',index_col=False)
@@ -1025,7 +1025,7 @@ BaM.columns
 BaM.head(5)
 
 
-# In[56]:
+# In[167]:
 
 
 BaM['difference'] = BaM['dem_prob'] - BaM['rep_prob']
@@ -1034,7 +1034,7 @@ BaM['State Rating'] = pd.cut(BaM.difference, [-1, -.3,-.15, 0 ,.15,.3,1], labels
 BaM.head()
 
 
-# In[57]:
+# In[168]:
 
 
 Trump_ECV = BaM.query("result == 'Donald Trump'")['ECV'].sum()
@@ -1042,7 +1042,7 @@ Biden_ECV = BaM.query("result == 'Joe Biden'")['ECV'].sum()
 print('Joe Biden: ',Biden_ECV,' Donald Trump: ',Trump_ECV )
 
 
-# In[58]:
+# In[169]:
 
 
 BaM_map = px.choropleth(BaM, locations='State_abb', 
@@ -1088,14 +1088,14 @@ BaM_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r=
 BaM_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[59]:
+# In[170]:
 
 
 bam_bardata=BaM.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 bam_bardata.head()
 
 
-# In[60]:
+# In[171]:
 
 
 BaM_bar = px.bar(bam_bardata, x="ECV", y='result' , color='State Rating', orientation='h',
@@ -1136,7 +1136,7 @@ BaM_bar.show()
 
 # # 538 Polling Average
 
-# In[61]:
+# In[172]:
 
 
 fte = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/538%20Polling%20Averages/election_basics_11_3.csv',index_col=False)
@@ -1147,7 +1147,7 @@ fte = fte.iloc[1:]
 fte.head(5)
 
 
-# In[62]:
+# In[173]:
 
 
 fte['difference'] = fte['Polls_Biden_11_3_538'] - fte['Polls_Trump_11_3_538']
@@ -1158,7 +1158,7 @@ Biden_ECV = fte.query("result == 'Joe Biden'")['ECV'].sum()
 print('Joe Biden: ',Biden_ECV,' Donald Trump: ',Trump_ECV )
 
 
-# In[63]:
+# In[174]:
 
 
 fte_map = px.choropleth(fte, locations='State_abb', 
@@ -1204,14 +1204,14 @@ fte_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r=
 fte_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[64]:
+# In[175]:
 
 
 fte_bardata=fte.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 fte_bardata.head()
 
 
-# In[65]:
+# In[176]:
 
 
 fte_bar = px.bar(fte_bardata, x="ECV", y='result' , color='State Rating', orientation='h',
@@ -1252,7 +1252,7 @@ fte_bar.show()
 
 # ## 538 Model Results
 
-# In[66]:
+# In[177]:
 
 
 ftem = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/538%20Polling%20Averages/538_final_model.csv',index_col=False)
@@ -1263,7 +1263,7 @@ ftem.columns
 ftem.head(5)
 
 
-# In[67]:
+# In[178]:
 
 
 ftem['difference'] = ftem['Biden'] - ftem['Trump']
@@ -1274,7 +1274,7 @@ Biden_ECV = fte.query("result == 'Joe Biden'")['ECV'].sum()
 print('Joe Biden: ',Biden_ECV,' Donald Trump: ',Trump_ECV )
 
 
-# In[68]:
+# In[179]:
 
 
 ftem_map = px.choropleth(ftem, locations='State_abb', 
@@ -1320,14 +1320,14 @@ ftem_map.update_layout(autosize=False,width=1300,height=900, margin=dict( l=50,r
 ftem_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[69]:
+# In[180]:
 
 
 ftem_bardata=ftem.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 ftem_bardata.head()
 
 
-# In[70]:
+# In[181]:
 
 
 ftem_bar = px.bar(ftem_bardata, x="ECV", y='result' , color='State Rating', orientation='h',
@@ -1368,7 +1368,7 @@ ftem_bar.show()
 
 # # CTWH model
 
-# In[71]:
+# In[182]:
 
 
 fundamental_probs = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/fundamentals_probs1015.csv')
@@ -1376,13 +1376,13 @@ poll_probs = pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhi
 codes=pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/state_codes.csv')
 
 
-# In[72]:
+# In[183]:
 
 
 poll_probs.head()
 
 
-# In[73]:
+# In[184]:
 
 
 states = fundamental_probs.iloc[:, 1]
@@ -1409,14 +1409,14 @@ electoral_votes = [9, 3, 11, 6, 55, 9, 7, 3, 3, 29, 16, 4, 4, 20, 11, 6, 6, 8, 8
 ctwh_results['electoral_votes'] = electoral_votes
 
 
-# In[74]:
+# In[185]:
 
 
 ctwh_results=pd.merge(codes,ctwh_results, on = ['States'])
 ctwh_results.head()
 
 
-# In[75]:
+# In[186]:
 
 
 ctwh_results['result'] = pd.cut(ctwh_results.Biden_Win_Probability, [0, 0.5, 1], labels=['Donald Trump','Joe Biden'])
@@ -1425,7 +1425,7 @@ ctwh_results.sort_values(by=['Biden_Win_Probability'], inplace=True)
 ctwh_results.head()
 
 
-# In[76]:
+# In[187]:
 
 
 Trump_ECV = ctwh_results.query("result == 'Donald Trump'")['ECV'].sum()
@@ -1433,7 +1433,7 @@ Biden_ECV = ctwh_results.query("result == 'Joe Biden'")['ECV'].sum()
 print( "TrumpECV  =  " + str(Trump_ECV) +"    Biden ECV =  " + str(Biden_ECV ))
 
 
-# In[77]:
+# In[188]:
 
 
 ctwh_map = px.choropleth(ctwh_results, locations='State_abb', 
@@ -1478,14 +1478,14 @@ config = dict({'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 ctwh_map.show(config=config)
 
 
-# In[78]:
+# In[189]:
 
 
 ctwh_bardata=ctwh_results.sort_values(by=['State Rating','ECV'], ascending=[True,False])
 ctwh_bardata.head()
 
 
-# In[79]:
+# In[190]:
 
 
 
@@ -1524,14 +1524,14 @@ ctwh_bar.add_annotation(x=270, y=2,
 ctwh_bar.show()
 
 
-# In[80]:
+# In[191]:
 
 
 ctwh_change=pd.read_csv('https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/notebooks/updated_probs_11_3.csv')
 ctwh_change.head()
 
 
-# In[81]:
+# In[192]:
 
 
 ctwh_change['result'] = pd.cut(ctwh_change.combine_probs, [0, 0.5, 1], labels=['Donald Trump','Joe Biden'])
@@ -1541,7 +1541,7 @@ ctwh_change=ctwh_change.sort_values(by='Days out from the Election', ascending=F
 ctwh_change.tail()
 
 
-# In[82]:
+# In[193]:
 
 
 Trump_ECV_90 = ctwh_change.query("result == 'Donald Trump' and timeframe == '90'")['ECV'].sum()
@@ -1575,7 +1575,7 @@ print('20 days Out: Joe Biden: ',Biden_ECV_20,' Donald Trump: ',Trump_ECV_20 )
 print('10 days Out: Joe Biden: ',Biden_ECV_10,' Donald Trump: ',Trump_ECV_10 )
 
 
-# In[83]:
+# In[194]:
 
 
 ctwh_change_map = px.scatter_geo(ctwh_change, locationmode="USA-states", locations= 'State_abb',color="State Rating",
@@ -1618,20 +1618,20 @@ ctwh_change_map.layout.updatemenus[0].buttons[0].args[1]["frame"]["duration"] = 
 ctwh_change_map.show(config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})
 
 
-# In[84]:
+# In[195]:
 
 
 ctwh_state=ctwh_change[ctwh_change['State'].isin(['Iowa', 'Texas', 'Michigan','New Hampshire', 'Nevada','Georgia','Minnesota', 'Wisconsin', 'Arizona','Pennsylvania','Ohio',
                         'Florida', 'Maine', 'North Carolina','Montana', 'Colorado', 'Virginia','New Mexico','Alaska','South Carolina'])]
 
 
-# In[85]:
+# In[196]:
 
 
 ctwh_state=ctwh_state.sort_values(by='Days out from the Election', ascending=False)
 
 
-# In[86]:
+# In[197]:
 
 
 state_map = px.scatter(ctwh_state, x="combine_probs", y='state_fips' ,animation_frame="Days out from the Election", 
@@ -1669,7 +1669,7 @@ state_map.show()
 
 # # DASH APP
 
-# In[111]:
+# In[200]:
 
 
 app = dash.Dash(__name__,external_stylesheets=external_stylesheets)
@@ -1703,6 +1703,7 @@ html.Center(children=[
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -1760,6 +1761,7 @@ html.Center(children=[
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -1847,6 +1849,7 @@ Economist_layout = html.Div(style={'backgroundColor': colors['background']}, chi
                 dcc.Link('Main Page', href='/', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -1916,6 +1919,7 @@ tfc_layout = html.Div(style={'backgroundColor': colors['background']}, children=
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2024,6 +2028,7 @@ fve_layout = html.Div(style={'backgroundColor': colors['background']}, children=
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Main Page', href='/', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2129,6 +2134,7 @@ bayesian_layout = html.Div(style={'backgroundColor': colors['background']}, chil
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2186,6 +2192,98 @@ Once we calculated our vote shares for each state, we sampled the aforementioned
             dcc.Markdown(''' This project is the creation of Ben Rogers, Chad Sopata, Matt Thomas, and Spencer Marusco for the University of Virginia School of Data Sciene. 
             All models are the product of their creators and all credit goes to them. Chase the White House does not endorse any candidate and is not tied to any organization other than the University of Virginia. Remember to vote!''')])])])
 
+linzer_layout = html.Div(style={'backgroundColor': colors['background']}, children=[
+   
+    html.Center(children=[
+        html.Div(style={'backgroundColor': colors['background'],'border-style': 'double'},children= [         
+            html.A([
+                html.Img(
+                    src='https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/images/CapstoneHeaderLogo.jpg',
+                    style={'height':'95%', 'width':'100%','marginRight':10,'marginBottom':0})],href='https://datascience.virginia.edu/'),
+           
+    ])]),
+
+     html.Center(children=[
+        html.Div(style={'backgroundColor': colors['header'],'border-style': 'double'}, children = [
+            html.Div( children = [
+                dcc.Link('About Us', href='/About_Us',style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Main Page', href='/', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
+                style={ 'display': 'inline-block'}),
+            html.Br(),
+            html.Div( children = [
+                dcc.Link('Sabato Crystal Ball', href='/Sabato_Crystal_Ball', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Time For Change Model', href='/Time_For_Change',style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Twitter Model', href='/Twitter_Model',style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Bayesian Model', href='/Bayesian_Model',style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('538', href='/538',style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Plural Vote', href='/Plural_Vote', style={'color': 'black'})],
+                style={ 'display': 'inline-block'})])]),
+    
+    
+    html.Br(),
+    html.Center(children=[
+        html.Div([
+            html.A([
+                html.Img(
+                    src='https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/images/CTWH3.png',
+                    style={ 'height': '5%', 'width': '20%' }) ], style={'marginLeftt': 20},href='/About_Us')])]),
+    
+    html.Br(),
+
+    html.Center(children=[html.H1('Linzer Model')]),
+    html.Br(),
+    html.Center(children=[html.A([
+            html.Img(
+                src="https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/Linzer_Model/Map.jpeg", 
+        style={'display': 'flex','align-item': 'center', 'justify-content': 'center','height': '40%', 'width': '60%'})
+    ], href='http://www.tandfonline.com/doi/abs/10.1080/01621459.2012.737735')]),
+    html.Br(),
+    html.Center(children=[html.A([
+            html.Img(
+                src="https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/Linzer_Model/EV_Biden.jpeg", 
+        style={'display': 'flex','align-item': 'center', 'justify-content': 'center','height': '40%', 'width': '60%'})
+    ], href='http://www.tandfonline.com/doi/abs/10.1080/01621459.2012.737735')]),
+    html.Br(),
+    html.Center(children=[html.A([
+            html.Img(
+                src="https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/Linzer_Model/Probabilities.jpeg", 
+        style={'display': 'flex','align-item': 'center', 'justify-content': 'center','height': '40%', 'width': '60%'})
+    ], href='http://www.tandfonline.com/doi/abs/10.1080/01621459.2012.737735')]),
+    html.Br(),
+    html.Center(children=[html.A([
+            html.Img(
+                src="https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/Linzer_Model/Swing_states.jpeg", 
+        style={'display': 'flex','align-item': 'center', 'justify-content': 'center','height': '40%', 'width': '60%'})
+    ], href='http://www.tandfonline.com/doi/abs/10.1080/01621459.2012.737735')]),
+    html.Br(),
+    
+    html.Center(children=[dcc.Markdown('''
+    The Linzer model is a polling-based model that predicts the election using monte carlo simulations of a gaussian random walk between the time the model is run and election day.
+    It forms the basis of the model used by The Economist. Link to paper: [https://votamatic.org/wp-content/uploads/2013/07/Linzer-JASA13.pdf](https://votamatic.org/wp-content/uploads/2013/07/Linzer-JASA13.pdf)
+
+    ''')]),
+    html.Center(children=[
+            dcc.Markdown(''' Click the link below to access the Chase the White House Github Page.
+            ''')]),
+    html.Center(children=[
+        html.Div(children= [         
+            html.A([
+                html.Img(
+                    src='https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/images/GitHub_Logo.png',
+                    style={'height':'25%', 'width':'25%','marginRight':10,'marginBottom':0})],href='https://github.com/bgrogers/ChaseTheWhiteHouse/'),])]),
+
+    
+    html.Center(children=[dcc.Link('Go back to home', href='/')]),
+    html.Br(),
+    html.Center(children=[
+        html.Div(style={'backgroundColor': colors['header'],'border-style': 'double'},children= [
+            dcc.Markdown(''' This project is the creation of Ben Rogers, Chad Sopata, Matt Thomas, and Spencer Marusco for the University of Virginia School of Data Sciene. 
+            All models are the product of their creators and all credit goes to them. Chase the White House does not endorse any candidate and is not tied to any organization other than the University of Virginia. Remember to vote!''')])])])
+
 fte_layout = html.Div(style={'backgroundColor': colors['background']}, children=[
    
     html.Center(children=[
@@ -2204,6 +2302,7 @@ fte_layout = html.Div(style={'backgroundColor': colors['background']}, children=
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2264,6 +2363,7 @@ sabato_layout = html.Div(style={'backgroundColor': colors['background']}, childr
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2329,6 +2429,7 @@ pec_layout = html.Div(style={'backgroundColor': colors['background']}, children=
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Main Page', href='/', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2411,6 +2512,7 @@ pv_layout = html.Div(style={'backgroundColor': colors['background']}, children=[
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2436,7 +2538,7 @@ pv_layout = html.Div(style={'backgroundColor': colors['background']}, children=[
 
     html.Center(children=[html.H1('Plural Vote')]),
     html.Br(),
-    html.Center(children = [dcc.Graph(figure=pv_bar, config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})]),
+    html.Center(children = [dcc.Graph(figure=pv_map, config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})]),
     html.Br(),
     html.Center(children = [dcc.Graph(figure=pv_bar, config={'scrollZoom': False,'displayModeBar': False, 'staticPlot': True})]),
     html.Br(),
@@ -2497,6 +2599,7 @@ twitter_layout = html.Div(style={'backgroundColor': colors['background']}, child
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2593,6 +2696,7 @@ jhk_layout = html.Div(style={'backgroundColor': colors['background']}, children=
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Main Page', href='/', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2689,6 +2793,7 @@ about_layout = html.Div(style={'backgroundColor': colors['background']}, childre
                 dcc.Link('Economist Model', href='/Economist', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Princeton Election Consortium', href='/PEC', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('JHK Forecasts', href='/JHK_Forecasts', style={'marginRight': 50, 'color': 'black'}),
+                dcc.Link('Linzer Model', href='/Linzer_Model', style={'marginRight': 50, 'color': 'black'}),
                 dcc.Link('Fair Vote Equation Model', href='/Fair_Vote_Equation', style={'color': 'black'})],
                 style={ 'display': 'inline-block'}),
             html.Br(),
@@ -2812,6 +2917,8 @@ def display_page(pathname):
         return bayesian_layout
     elif pathname == '/Twitter_Model':
         return twitter_layout
+    elif pathname == '/Linzer_Model':
+        return linzer_layout
     elif pathname =='/Plural_Vote':
         return pv_layout
     elif pathname =='/PEC':
