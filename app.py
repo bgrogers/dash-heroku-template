@@ -16,15 +16,13 @@ import plotly.express as px
 import plotly.offline as pyo
 from datetime import date
 import dash
-#from jupyter_dash import JupyterDash
+
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-pip install plotly --upgrade
 
 ecv = pd.read_csv("https://raw.githubusercontent.com/bgrogers/ChaseTheWhiteHouse/master/538%20Polling%20Averages/election_basics_11_3.csv", index_col=False)
 ecv.columns
@@ -1339,8 +1337,8 @@ state_map.show()
 
 """# DASH APP"""
 
-app = dash.Dash(__name__,external_stylesheets=external_stylesheets)
-#app = JupyterDash(__name__,external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
 server = app.server
 
 app.layout = html.Div([
@@ -2599,13 +2597,6 @@ def display_page(pathname):
     else:
         return index_page
 
-#PORT = os.environ.get('PORT')
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8040)
-#if __name__ == '__main__':
-#    app.run_server(debug=True, port=PORT)
-
-
-
-
+    app.run_server(debug=True, port=8041)
 
